@@ -76,9 +76,63 @@ DeckPrinter = function(options) {
     pdf.text(rect[0] + 5, rect[1] + 5, JSON.stringify(card, null, '\t'));
   }
 
+  function xmlToString(xmlData) { 
+
+    var xmlString;
+    //IE
+    if (window.ActiveXObject){
+        xmlString = xmlData.xml;
+    }
+    // code for Mozilla, Firefox, Opera, etc.
+    else{
+        xmlString = (new XMLSerializer()).serializeToString(xmlData);
+    }
+    return xmlString;
+  }
+
+  function cardSVG(card, jqsvg) {
+    // use {{ }} instead of <% %> for underscore templating
+    // TODO: set this somewhere else?
+    _.templateSettings = {
+      interpolate : /\{\{(.+?)\}\}/g
+    };
+    //console.log(card);  
+
+    // perform substitutions on text
+    jqsvg.find('text').each(function(idx, textel) {
+      var jqel = $(textel);
+      var newText = _.template(jqel.text(), card);
+      jqel.text(newText);
+    });
+
+    // hide layers
+    if (card.hasOwnProperty('layers')) {
+      var layers = card.layers.split('|');
+      console.log(JSON.stringify(layers));
+      jqsvg.find('g > title').filter(function(index) {
+        console.log($(this));
+        var labelTitle = $(this).text();
+        console.log(labelTitle);
+        return $.inArray(labelTitle, layers) === -1;
+      }).parent('g').attr('visibility', 'hidden');
+      return {svg: xmlToString(jqsvg[0])};   
+    }
+  }
+
   var obj = {
     getCardSizes: function() {
       return cardsizes;
+    },
+    // return an array of svg card type previews with values substituted
+    //[{svg: "<b>test1</b>"}, {svg: "<b>test2</b"}];
+    // Sort of an SVG mail merge.
+    preview: function(cards, svg) {
+      var cardpreviews = [];
+      $.each(cards, function(idx, card) {
+        var jqsvg = $($.parseXML(svg));
+        cardpreviews.push(cardSVG(card, jqsvg));  
+      }); 
+      return cardpreviews;
     },
     print: function(cards) {
       var doc = new jsPDF('p', 'mm', 'letter');
@@ -99,3 +153,7 @@ DeckPrinter = function(options) {
   }
   return obj;
 }
+
+
+
+

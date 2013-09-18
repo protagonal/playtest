@@ -90,7 +90,20 @@ DeckPrinter = function(options) {
     return xmlString;
   }
 
-  function cardSVG(card, jqsvg) {
+  function showHideLayers(jqsvg, layers) {
+    // show all layers by default
+    jqsvg.find('g > title').parent('g').attr('display', 'inline');
+    // if any layers were listed, hide all others
+    if (layers.length > 0) {
+      jqsvg.find('g > title').filter(function(index) {
+        var labelTitle = $(this).text();
+        //console.log(labelTitle);
+        return $.inArray(labelTitle, layers) === -1;
+      }).parent('g').attr('display', 'none');
+    }
+  }
+
+  function cardSVG(card, jqsvg, id) {
     // use {{ }} instead of <% %> for underscore templating
     // TODO: set this somewhere else?
     _.templateSettings = {
@@ -105,18 +118,10 @@ DeckPrinter = function(options) {
       jqel.text(newText);
     });
 
-    // hide layers
-    if (card.hasOwnProperty('layers')) {
-      var layers = card.layers.split('|');
-      console.log(JSON.stringify(layers));
-      jqsvg.find('g > title').filter(function(index) {
-        console.log($(this));
-        var labelTitle = $(this).text();
-        console.log(labelTitle);
-        return $.inArray(labelTitle, layers) === -1;
-      }).parent('g').attr('visibility', 'hidden');
-      return {svg: xmlToString(jqsvg[0])};   
-    }
+    // set layer visibility
+    showHideLayers(jqsvg, card.layers);
+
+    return {svg: xmlToString(jqsvg[0]), id: id};
   }
 
   var obj = {
@@ -124,15 +129,29 @@ DeckPrinter = function(options) {
       return cardsizes;
     },
     // return an array of svg card type previews with values substituted
-    //[{svg: "<b>test1</b>"}, {svg: "<b>test2</b"}];
+    //[{svg: "<b>test1</b>", id: 0}, {svg: "<b>test2</b>", id: 1}];
     // Sort of an SVG mail merge.
     preview: function(cards, svg) {
       var cardpreviews = [];
       $.each(cards, function(idx, card) {
         var jqsvg = $($.parseXML(svg));
-        cardpreviews.push(cardSVG(card, jqsvg));  
+        cardpreviews.push(cardSVG(card, jqsvg, idx));  
       }); 
       return cardpreviews;
+    },
+    // take SVG string and return SVG string with 
+    // layers (aka groups) for card visible
+    svgLayersCard: function(svg, card) {
+      var jqsvg = $($.parseXML(svg));
+      showHideLayers(jqsvg, card.layers);
+      return xmlToString(jqsvg[0]);
+    },
+    // take SVG (a string) and return SVG with all 
+    // layers (aka groups) visible
+    svgLayersAll: function(svg) {
+      var jqsvg = $($.parseXML(svg));
+      showHideLayers(jqsvg, []);
+      return xmlToString(jqsvg[0]);
     },
     print: function(cards) {
       var doc = new jsPDF('p', 'mm', 'letter');

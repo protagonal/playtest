@@ -44,6 +44,76 @@ if (Meteor.isClient) {
     }
   }
 
+  function editSVG(cardid) {
+    // open editor
+    var multiplier = 5;
+    var width = 63 * multiplier;
+    var height = 88 * multiplier;
+    $("#csveditor").html('<iframe id="svg_frame" src="svg-edit/svg-editor.html?showlayers=true&dimensions=' + width + ',' + height + '" width="730" height="880"/>');
+    
+    var card = getdeckcard(cardid);
+    var svg = Template.deckspec.deckspec().cardtemplate;      
+    $('#svg_frame').ready(function() {
+      var ifrm = $('#svg_frame')[0];
+
+      function editor_ready() {
+        console.log('SVG editor is ready');          
+        var svgEditor = ifrm.contentWindow.svgEditor;
+        
+        // make card-selected layers visible, hide the rest
+        var printer = DeckPrinter({layout: '2x2'});
+        svg = printer.svgLayersCard(svg, card);
+
+        console.log(svg);
+        svgEditor.loadFromString(svg);
+        // alert(svgEditor.canvas.getCurrentDrawing().getNumLayers());
+        var drawing = svgEditor.canvas.getCurrentDrawing();
+        var canvas = svgEditor.canvas;
+        logobj(card.layers);
+        
+        /* for (var i = 0; i < drawing.getNumLayers(); i++) {
+          var name = drawing.getLayerName(i);
+          console.log(name, card.layers.length === 0, $.inArray(name, card.layers));
+          if (card.layers.length === 0 || $.inArray(name, card.layers) !== -1) {
+            canvas.setLayerVisibility(name, true);
+          } else {
+            canvas.setLayerVisibility(name, false);
+          }
+        } */
+
+        if (card.layers.length > 0) {
+          canvas.setCurrentLayer(card.layers[card.layers.length - 1]);
+        }
+        svgEditor.populateLayers();
+
+        svgEditor.setCustomHandlers({
+            save: function(win, data) {
+              var svg = data;
+              console.log(svg);
+
+              // make all layers visible when saving 
+              var printer = DeckPrinter({layout: '2x2'});
+              svg = printer.svgLayersAll(svg);
+
+              save_cardtemplate(svg);
+            }
+        });
+      }
+
+      // waiting for real load
+      (function() {
+        try {
+          ifrm.contentWindow.svgEditor.ready(function() { editor_ready(); });
+        }
+        catch (e) {
+          console.log(e.name, e.message);
+          setTimeout(arguments.callee, 1000);
+        }
+      })();
+      
+    }); 
+  }
+
   Template.cardtemplate.events({
     'focusout' : function (evt) {
       var value = String(evt.target.value || "");
@@ -51,51 +121,44 @@ if (Meteor.isClient) {
       save_cardtemplate(value);
     },
     'click input' : function () {
-      // open editor
-      var multiplier = 5;
-      var width = 63 * multiplier;
-      var height = 88 * multiplier;
-      $("#csveditor").html('<iframe id="svg_frame" src="svg-edit/svg-editor.html?showlayers=true&dimensions=' + width + ',' + height + '" width="730" height="880"/>');
+      editSVG({});
       
-      var svg = Template.deckspec.deckspec().cardtemplate;      
-      $('#svg_frame').ready(function() {
-        var ifrm = $('#svg_frame')[0];
-
-        function editor_ready() {
-          console.log('SVG editor is ready');          
-          var svgEditor = ifrm.contentWindow.svgEditor;
-          svgEditor.loadFromString(svg);
-          svgEditor.setCustomHandlers({
-              save: function(win, data) {
-                //var svg = "<?xml version=\"1.0\"?>\n" + data;
-                var svg = data;
-                console.log(svg);
-                save_cardtemplate(svg);
-              }
-          });
-          //svgEditor.ready(function() {});
-        }
-
-        // waiting for real load
-        (function() {
-          try {
-            ifrm.contentWindow.svgEditor.ready(function() { editor_ready(); });
-          }
-          catch (e) {
-            console.log(e.name, e.message);
-            setTimeout(arguments.callee, 1000);
-          }
-        })();
-        
-      }); 
     }
   });
+
+  Template.preview.events({
+    'click .card-preview' : function (evt) {
+      editSVG($(evt.target).closest('div').data('card-id'));
+    },
+  });
+
+  function deckcards() {
+    var cards;
+    try {
+      cards = $.csv.toObjects(Template.deckspec.deckspec().spec); 
+      $.each(cards, function(idx, card) {
+        if (card.hasOwnProperty('layers')) {
+          card.layers = card.layers.split('|');
+        } else {
+          card.layers = [];
+        }
+      });
+      return cards;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function getdeckcard(id) {
+    var cards = deckcards();
+    return cards[id];
+  }
 
   Template.preview.uniquecards = function () {
     var cards;
     var svg;
     try {
-      cards = $.csv.toObjects(Template.deckspec.deckspec().spec); 
+      cards = deckcards();
       svg = Template.deckspec.deckspec().cardtemplate;      
     } catch (e) {
       return [];

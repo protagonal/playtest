@@ -1,1 +1,8 @@
 /* CSS declarations go here */
+body {
+    background: #ccc;
+}
+
+.card-preview {
+    display: inline-block;
+}

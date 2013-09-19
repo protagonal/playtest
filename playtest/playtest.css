@@ -6,3 +6,8 @@ body {
 .card-preview {
     display: inline-block;
 }
+
+.card-size-magic {
+    width: 126px; 
+    height: 176px;
+}

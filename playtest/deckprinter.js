@@ -103,6 +103,17 @@ DeckPrinter = function(options) {
     }
   }
 
+  function resize(jqsvg) {
+    // TODO: size based on sleeve size
+    console.log('resizing!');
+    var el = jqsvg.find('svg');
+    console.log(el);
+    el.attr('width', '100%');
+    el.attr('height', '100%');
+    el.attr('viewBox', '0 0 316 441'); 
+    el.attr('preserveAspectRatio', 'xMidYMid meet');
+  }
+
   function cardSVG(card, jqsvg, id) {
     // use {{ }} instead of <% %> for underscore templating
     // TODO: set this somewhere else?
@@ -120,6 +131,9 @@ DeckPrinter = function(options) {
 
     // set layer visibility
     showHideLayers(jqsvg, card.layers);
+
+    // scale to preview size
+    resize(jqsvg);
 
     return {svg: xmlToString(jqsvg[0]), id: id};
   }

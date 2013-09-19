@@ -57,19 +57,15 @@ if (Meteor.isClient) {
       var ifrm = $('#svg_frame')[0];
 
       function editor_ready() {
-        console.log('SVG editor is ready');          
         var svgEditor = ifrm.contentWindow.svgEditor;
         
         // make card-selected layers visible, hide the rest
         var printer = DeckPrinter({layout: '2x2'});
         svg = printer.svgLayersCard(svg, card);
 
-        console.log(svg);
         svgEditor.loadFromString(svg);
-        // alert(svgEditor.canvas.getCurrentDrawing().getNumLayers());
         var drawing = svgEditor.canvas.getCurrentDrawing();
         var canvas = svgEditor.canvas;
-        logobj(card.layers);
         
         /* for (var i = 0; i < drawing.getNumLayers(); i++) {
           var name = drawing.getLayerName(i);

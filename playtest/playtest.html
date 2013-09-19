@@ -5,28 +5,28 @@
 <body>
   <h2>Playtest</h2>
   <div class="playtest-deckspec">
-      <h3>Deck Spec</h3>
+      <h3>Deck</h3>
       {{> deckspec}}
       <!-- <div id="editor" class="bypass"></div> -->
   </div>
+  <div id="preview">
+    <h3>Design</h3>
+    {{> preview}}
+    <div id="csveditor">
+    </div>
+  </div>
   <div class="playtest-cardtemplate">
-      <h3>Card Template</h3>
+      <h3>SVG</h3>
       {{> cardtemplate}}
       <br>
       <!-- TODO: base initial size on which card size is selected -->
       <!--  -->
       <!-- src="http://svg-edit.googlecode.com/svn/tags/stable/editor/svg-editor.html" -->
-      <div id="csveditor">
-      </div>
-  </div>
-  <div id="preview">
-    <h3>Preview</h3>
-    {{> preview}}
   </div>
 </body>
 
 <template name="deckspec">
-  <textarea rows="15" cols="40">{{ deckspec.spec }}</textarea>
+  <textarea rows="10" cols="40">{{ deckspec.spec }}</textarea>
   <input type="button" value="Download PDF" />
 </template>
 
@@ -37,7 +37,7 @@
 
 <template name="preview">
   {{#each uniquecards}}
-  <div class="card-preview" data-card-id="{{id}}">
+  <div class="card-preview card-size-magic" data-card-id="{{id}}">
       {{{ svg }}}
     </div>
   {{/each}}

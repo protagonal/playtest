@@ -23,13 +23,6 @@ if (Meteor.isClient) {
         Spec.update(row._id, {$set: {spec: value}});
       }
     },
-    'click input' : function () {
-      // template data, if any, is available in 'this'
-      var cards = $.csv.toObjects(Template.deckspec.deckspec().spec); 
-      console.log(JSON.stringify(cards, null, '\t'));
-      var printer = DeckPrinter({layout: '2x2'});
-      printer.print(cards);
-     }
   });
 
   Template.cardtemplate.deckspec = function () {
@@ -122,10 +115,21 @@ if (Meteor.isClient) {
     }
   });
 
+  function printDeck() {
+    // template data, if any, is available in 'this'
+    var cards = $.csv.toObjects(Template.deckspec.deckspec().spec); 
+    console.log(JSON.stringify(cards, null, '\t'));
+    var printer = DeckPrinter({layout: '2x2'});
+    printer.printSVG(window, cards);
+  }
+
   Template.preview.events({
     'click .card-preview' : function (evt) {
       editSVG($(evt.target).closest('div').data('card-id'));
     },
+    'click input' : function () {
+      printDeck();
+    }
   });
 
   function deckcards() {
@@ -150,7 +154,7 @@ if (Meteor.isClient) {
     return cards[id];
   }
 
-  Template.preview.uniquecards = function () {
+  function getCardSVG(options) {
     var cards;
     var svg;
     try {
@@ -160,10 +164,18 @@ if (Meteor.isClient) {
       return [];
     }
     var printer = DeckPrinter({layout: '2x2'});
-    var previewcards = printer.preview(cards, svg);
+    var previewcards = printer.preview(cards, svg, options);
     console.log(previewcards);
     return previewcards;
+  }
+
+  Template.preview.uniquecards = function () {
+    return getCardSVG({unique: true});
   };
+
+  Template.printable.cards = function () {
+    return getCardSVG({unique: false});
+  }
 }
 
 if (Meteor.isServer) {

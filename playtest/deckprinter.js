@@ -105,7 +105,7 @@ DeckPrinter = function(options) {
 
   function resize(jqsvg) {
     // TODO: size based on sleeve size
-    console.log('resizing!');
+    // console.log('resizing!');
     var el = jqsvg.find('svg');
     console.log(el);
     el.attr('width', '100%');
@@ -134,8 +134,21 @@ DeckPrinter = function(options) {
 
     // scale to preview size
     resize(jqsvg);
+    var styles = "";
 
-    return {svg: xmlToString(jqsvg[0]), id: id};
+    // TODO?: card positioning
+    return {svg: xmlToString(jqsvg[0]), id: id, styles: styles};
+  }
+
+  function makeid()
+  {
+        var text = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+                for( var i=0; i < 5; i++ )
+                          text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+                    return text;
   }
 
   var obj = {
@@ -145,11 +158,18 @@ DeckPrinter = function(options) {
     // return an array of svg card type previews with values substituted
     //[{svg: "<b>test1</b>", id: 0}, {svg: "<b>test2</b>", id: 1}];
     // Sort of an SVG mail merge.
-    preview: function(cards, svg) {
+    preview: function(cards, svg, options) {
       var cardpreviews = [];
       $.each(cards, function(idx, card) {
         var jqsvg = $($.parseXML(svg));
-        cardpreviews.push(cardSVG(card, jqsvg, idx));  
+
+        var qty = card.quantity || 1;
+        if (options.unique) {
+          qty = 1;
+        } 
+        for (var i = 0; i < qty; i++) {
+          cardpreviews.push(cardSVG(card, jqsvg, idx));  
+        }
       }); 
       return cardpreviews;
     },
@@ -167,7 +187,16 @@ DeckPrinter = function(options) {
       showHideLayers(jqsvg, []);
       return xmlToString(jqsvg[0]);
     },
-    print: function(cards) {
+    printSVG: function(window, cards) {
+      w = window.open();
+      w.document.write('<html><head><link rel="stylesheet" href="/playtest.css?' + makeid() + '"></head><body>');
+      w.document.write($('#printable').html());
+      w.document.write("</body></html>");
+      w.print();
+      // TODO: why does this mess up the CSS (show a card per page)?
+      //w.close();
+    },
+    printPDF: function(cards) {
       var doc = new jsPDF('p', 'mm', 'letter');
       var cardIndex = 0;
       $.each(cards, function(typeIndex, card) {

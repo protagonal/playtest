@@ -1,33 +1,64 @@
 <head>
   <title>Playtest</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../assets/css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+    </style>
+    <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
 </head>
 
-<body>
-  <h2>Playtest</h2>
-  <div class="playtest-deckspec">
-      <h3>Deck</h3>
-      {{> deckspec}}
-      <!-- <div id="editor" class="bypass"></div> -->
+<body >
+  <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+          <div class="container">
+            <a class="brand" href="#">Playtest</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+          </div>
+      </div>
   </div>
-  <div id="preview">
-    <h3>Design</h3>
-    {{> preview}}
-    <div id="csveditor">
-    </div>
-  </div>
-  <div class="playtest-cardtemplate">
-      <h3>SVG</h3>
-      {{> cardtemplate}}
-      <br>
-      <!-- TODO: base initial size on which card size is selected -->
-      <!--  -->
-      <!-- src="http://svg-edit.googlecode.com/svn/tags/stable/editor/svg-editor.html" -->
+  <div class="container">
+      <div class="hero-unit" id="preview">
+        <h3>Cards</h3>
+        {{> preview}}
+        <div id="csveditor">
+        </div>
+      </div>
+      <div style="display: none;" id="printable">
+        {{> printable}}
+      </div>
+      <div class="row">
+          <div class="span4 playtest-deckspec">
+              <h3>Deck</h3>
+              {{> deckspec}}
+              <!-- <div id="editor" class="bypass"></div> -->
+          </div> 
+          <div class="span2 playtest-cardtemplate">
+              <h3>SVG</h3>
+              {{> cardtemplate}}
+              <br>
+              <!-- TODO: base initial size on which card size is selected -->
+              <!--  -->
+              <!-- src="http://svg-edit.googlecode.com/svn/tags/stable/editor/svg-editor.html" -->
+          </div>
+      </div>
+      <footer>
+      &copy; Protagonal 2013
+      </footer>
   </div>
 </body>
 
 <template name="deckspec">
   <textarea rows="10" cols="40">{{ deckspec.spec }}</textarea>
-  <input type="button" value="Download PDF" />
 </template>
 
 <template name="cardtemplate">
@@ -41,6 +72,18 @@
       {{{ svg }}}
     </div>
   {{/each}}
+  <input type="button" value="Print" />
 </template>
+
+<template name="printable">
+  <div id="section-to-print">
+  {{#each cards}}
+  <div class="card-preview card-size-magic {{styles}}" data-card-id="{{id}}">
+      {{{ svg }}}
+  </div>
+  {{/each}}
+  </div>
+</template>
+
 
 

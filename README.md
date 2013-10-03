@@ -44,7 +44,12 @@ In the example, only the layer titled `base` would display for the knave card an
 User Interface
 --------------
 
-Modify the table on the left. Changes are reflected as you type in the card deck on the right.
+The site is hosted [here](http://playtest.meteor.com).
+
+- each unique card is displayed at the top. Click on the card to open an in-browser SVG editor. Changes made in this editor must be saved by clicking SVG Edit -> Save Image, or they'll be lost when you click on another card (or reload the page).
+- the text box on the bottom on the left has the CSV deck specification as described above. Click outside the text box after making changes to save them.
+- the text box on the bottom on the right has the SVG. It's for debugging. As with the deck specification, click outside after making changes to save them.
+- the About menu doesn't do anything yet
 
 
 TODO

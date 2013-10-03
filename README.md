@@ -1,6 +1,6 @@
-## playtest
+## Playtest
 
-Playtest is a card game printer. It takes tabular card specification format as input and outputs PDF files of numbered and versioned cards in the correct quantities to be printed and play tested.
+Playtest is a card game printer. It takes tabular card specification format as input and prints pages of numbered and versioned cards in the correct quantities so they can be play tested.
 
 
 ### Deck Spec
@@ -25,7 +25,7 @@ queen,$2,2
 wizard,$5,1
 ```
 
-In the example, playtest would print five copies of knave, two copies of queen, and one wizard.
+In the example, Playtest would print five copies of knave, two copies of queen, and one wizard.
 
 * `layers` specifies which named svg groups should be displayed. If a `layers` column is present, all layers are hidden unless explicitly listed in a given row. Multiple layers should be delimited by the pipe symbol (`|`).
 
@@ -38,6 +38,9 @@ wizard,$5,1,base
 
 In the example, only the layer titled `base` would display for the knave card and wizard card, but the queen card would have `base` and `queen` layers displayed.
 
+### Card Design
+
+Playtest card designs are specified in a single SVG file with multiple layers. The deck specification determines which layer is shown when each card is printed. Text labels in the SVG may also include template values that Playtest will substitute for column values.  The template has this format: `{{ column_name }}`.
 
 ### User Interface
 
@@ -48,10 +51,11 @@ The latest version of this project is hosted [here](http://playtest.meteor.com).
 * each unique card is displayed at the top under "Cards". Click on the card to open an in-browser SVG editor. Changes made in this editor must be saved by clicking SVG Edit -> Save Image, or they'll be lost when you click on another card (or reload the page).
 * the text box on the bottom on the left labeled "Deck" is the deck specification as described above. Click outside the text box after making changes to save them.
 * the text box on the bottom on the right labeled "Design" is the SVG card design. It's for debugging. As with the deck specification, click outside after making changes to save them.
-* The site is currently in development and only one game can be saved at a time. If you design a game and you want to be sure it's safe, it's a good idea to copy the deck spec and SVG text somewhere else. Everything about your game is included in those two files. Later I'll add the ability to save multiple games so you can be sure your stuff doesn't get clobbered.
+* Only one game can be saved at a time. If you design a game and you want to be sure it's safe, it's a good idea to copy the deck spec and SVG text somewhere else. Everything about your game is included in those two files. The ability to save multiple games so you can be sure your stuff doesn't get clobbered is coming soon.
 
 ### TODO
 
+- save multiple card games under unique URLs
 - print diffs, to save time when tweaking game rules
 - automatically show odds of drawing various cards and card combinations
 - google docs API integration

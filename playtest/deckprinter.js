@@ -189,7 +189,7 @@ DeckPrinter = function(options) {
     },
     printSVG: function(window, cards) {
       w = window.open();
-      w.document.write('<html><head><link rel="stylesheet" href="/playtest.css?' + makeid() + '"></head><body>');
+      w.document.write('<html><head><link rel="stylesheet" href="/css/playtest.css?' + makeid() + '"></head><body>');
       w.document.write($('#printable').html());
       w.document.write("</body></html>");
       w.print();

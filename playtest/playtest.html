@@ -2,6 +2,7 @@
   <title>Playtest</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../assets/css/bootstrap.css" rel="stylesheet">
+    <link href="/css/playtest.css" rel="stylesheet">
     <style type="text/css">
       body {
         padding-top: 60px;
@@ -20,7 +21,6 @@
                 <ul class="nav">
                     <li class="active"><a href="#">Home</a></li>
                     <li><a href="#about">About</a></li>
-                    <li><a href="#contact">Contact</a></li>
                 </ul>
             </div>
           </div>
@@ -37,18 +37,14 @@
         {{> printable}}
       </div>
       <div class="row">
-          <div class="span4 playtest-deckspec">
+          <div class="span6 playtest-deckspec">
               <h3>Deck</h3>
               {{> deckspec}}
               <!-- <div id="editor" class="bypass"></div> -->
           </div> 
-          <div class="span2 playtest-cardtemplate">
-              <h3>SVG</h3>
+          <div class="span6 playtest-cardtemplate">
+              <h3>Design</h3>
               {{> cardtemplate}}
-              <br>
-              <!-- TODO: base initial size on which card size is selected -->
-              <!--  -->
-              <!-- src="http://svg-edit.googlecode.com/svn/tags/stable/editor/svg-editor.html" -->
           </div>
       </div>
       <footer>
@@ -58,12 +54,11 @@
 </body>
 
 <template name="deckspec">
-  <textarea rows="10" cols="40">{{ deckspec.spec }}</textarea>
+  <textarea rows="10" cols="80">{{ deckspec.spec }}</textarea>
 </template>
 
 <template name="cardtemplate">
-  <textarea rows="15" cols="40">{{ deckspec.cardtemplate }}</textarea>
-  <input type="button" value="Edit" />
+  <textarea rows="15" cols="80">{{ deckspec.cardtemplate }}</textarea>
 </template>
 
 <template name="preview">
@@ -72,6 +67,7 @@
       {{{ svg }}}
     </div>
   {{/each}}
+  <br>
   <input type="button" value="Print" />
 </template>
 

@@ -1,0 +1,55 @@
+/* CSS declarations go here */
+body {
+    background: #ccc;
+    padding-top: 40px;
+}
+
+@media screen and (max-width: 768px) {
+    body { padding-top: 0px; }
+}
+
+@media screen and (max-width: 1076px) {
+    body { padding-top: 90px; }
+}
+.card-preview {
+    display: inline-block;
+}
+
+.card-size-magic {
+    width: 126px; 
+    height: 176px;
+}
+
+@media print {
+  body {
+    background: #fff;
+  }
+  body * {
+    visibility: hidden;
+  }
+  #section-to-print, #section-to-print * {
+    visibility: visible;
+  }
+  #section-to-print {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 0px;
+    padding: 0px;
+  }
+
+  .card {
+    margin: 0px;
+    padding: 0px;
+    page-break-inside: avoid;
+  }
+
+  .card-size-magic {
+    width: 2.35in;
+    height: 3.35in;
+  }
+
+  @page {
+    margin: 2cm;
+  }
+}

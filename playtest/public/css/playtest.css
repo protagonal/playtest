@@ -8,6 +8,12 @@ textarea {
     width: 90%;
 }
 
+#login-buttons {
+    margin-top: 10px;
+}
+.login-display-name {
+    color: #fff;
+}
 @media screen and (max-width: 768px) {
     body { padding-top: 0px; }
 }

@@ -51,12 +51,10 @@ The latest version of this project is hosted [here](http://playtest.meteor.com).
 * Each unique card is displayed at the top under "Cards". Click on the card to open an in-browser SVG editor. Changes made in this editor must be saved by clicking SVG Edit -> Save Image, or they'll be lost when you click on another card (or reload the page).
 * The text box on the bottom on the left labeled "Deck" is the deck specification as described above. Click outside the text box after making changes to save them.
 * The text box on the bottom on the right labeled "Design" is the SVG card design. It's for debugging. As with the deck specification, click outside after making changes to save them.
-* Only one game can be saved at a time. If you design a game and you want to be sure it's safe, it's a good idea to copy the deck spec and SVG text somewhere else. Everything about your game is included in those two files. The ability to save multiple games so you can be sure your stuff doesn't get clobbered is coming soon.
+* If you are not logged in, any new games are public and show up in everyone's list. If you're logged in, any new games you create are private and only accessible to you.
 
 ### TODO
 
-- save multiple card games under unique URLs
 - print diffs, to save time when tweaking game rules
 - automatically show odds of drawing various cards and card combinations
 - google docs API integration
-- save cards

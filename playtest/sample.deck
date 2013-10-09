@@ -1,0 +1,8 @@
+name,cost,quantity,layers
+king,$2,1,base|cartoon|king
+queen,$3,1,base|cartoon|queen
+wizard,$5,1,base|cartoon|wizard
+jester,$2,1,base|cartoon|jester
+knight,$2,1,base|cartoon|knight
+cyclops,$1,1,base|cartoon|cyclops
+arachnomancer,$5,1,base|cartoon|arachnomancer

@@ -25,6 +25,7 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="#">Home</a></li>
+            <!--
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   Game <b class="caret"></b></a>
@@ -33,37 +34,62 @@
                 <li><a href="#save">Save</a></li>
               </ul>
             </li>
+            -->
             <li><a href="https://github.com/protagonal/playtest#user-interface">About</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li>{{ loginButtons }}</li>
           </ul>
         </div>
       </div>
   </div>
   <div class="container">
-      <div class="jumbotron" id="preview">
-        <h3>Cards</h3>
-        {{> preview}}
-        <div id="csveditor">
-        </div>
-      </div>
-      <div style="display: none;" id="printable">
-        {{> printable}}
-      </div>
-      <div class="row">
-          <div class="col-lg-6 playtest-deckspec">
-              <h3>Deck</h3>
-              {{> deckspec}}
-              <!-- <div id="editor" class="bypass"></div> -->
-          </div> 
-          <div class="col-lg-6 playtest-cardtemplate">
-              <h3>Design</h3>
-              {{> cardtemplate}}
+      <div class="row row-offcanvas row-offcanvas-left">
+          <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+              <h3>Games</h3>
+              <div class="well sidebar-nav">
+                {{> menu }} 
+              </div>
+          </div>
+          <div class="col-xs-12 col-sm-9">
+              <div class="row" id="preview">
+                <div class="col-lg-12">
+                  {{> preview}}
+                  <div id="csveditor">
+                  </div>
+                </div>
+              </div>
+              <div style="display: none;" id="printable">
+                {{> printable}}
+              </div>
+              <div class="row">
+                  <div class="col-lg-6 playtest-deckspec">
+                      <h3>Deck</h3>
+                      {{> deckspec}}
+                      <!-- <div id="editor" class="bypass"></div> -->
+                  </div> 
+                  <div class="col-lg-6 playtest-cardtemplate">
+                      <h3>Design</h3>
+                      {{> cardtemplate}}
+                  </div>
+              </div>
           </div>
       </div>
+      <hr>
       <footer>
       &copy; Protagonal 2013
       </footer>
   </div>
 </body>
+
+<template name="menu">
+  <ul class="nav">
+  {{#each games}}
+    <li><a class="game" data-name="{{ name }}" href="javascript:void(0);">{{ name }}</a></li>
+  {{/each}}
+  </ul>
+  <button type="button" class="new btn">New</button>
+</template>
 
 <template name="deckspec">
   <textarea rows="10" cols="80">{{ deckspec.spec }}</textarea>
@@ -74,13 +100,17 @@
 </template>
 
 <template name="preview">
+  <div class="page-header">
+    <h3>{{ game.name }} <small>{{#if game.public }}(public){{else}}(private){{/if}}</small></h3>
+  </div>
   {{#each uniquecards}}
   <div class="card-preview card-size-magic" data-card-id="{{id}}">
       {{{ svg }}}
     </div>
   {{/each}}
   <br>
-  <input type="button" value="Print" />
+  <input type="button" class="print" value="Print" />
+  <input type="button" class="delete" value="Delete" />
 </template>
 
 <template name="printable">

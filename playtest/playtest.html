@@ -9,25 +9,37 @@
         padding-bottom: 40px;
       }
     </style>
-    <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
 </head>
 
-<body >
+<body>
   <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-          <div class="container">
-            <a class="brand" href="#">Playtest</a>
-            <div class="nav-collapse collapse">
-                <ul class="nav">
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="https://github.com/protagonal/playtest#user-interface">About</a></li>
-                </ul>
-            </div>
-          </div>
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Playtest</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  Game <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#new">New</a></li>
+                <li><a href="#save">Save</a></li>
+              </ul>
+            </li>
+            <li><a href="https://github.com/protagonal/playtest#user-interface">About</a></li>
+          </ul>
+        </div>
       </div>
   </div>
   <div class="container">
-      <div class="hero-unit" id="preview">
+      <div class="jumbotron" id="preview">
         <h3>Cards</h3>
         {{> preview}}
         <div id="csveditor">
@@ -37,12 +49,12 @@
         {{> printable}}
       </div>
       <div class="row">
-          <div class="span6 playtest-deckspec">
+          <div class="col-lg-6 playtest-deckspec">
               <h3>Deck</h3>
               {{> deckspec}}
               <!-- <div id="editor" class="bypass"></div> -->
           </div> 
-          <div class="span6 playtest-cardtemplate">
+          <div class="col-lg-6 playtest-cardtemplate">
               <h3>Design</h3>
               {{> cardtemplate}}
           </div>

@@ -4,6 +4,10 @@ body {
     padding-top: 40px;
 }
 
+textarea {
+    width: 90%;
+}
+
 @media screen and (max-width: 768px) {
     body { padding-top: 0px; }
 }
@@ -53,3 +57,5 @@ body {
     margin: 2cm;
   }
 }
+
+

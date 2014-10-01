@@ -101,7 +101,8 @@
 
 <template name="preview">
   <div class="page-header">
-    <h3>{{ game.name }} <small>{{#if game.public }}(public){{else}}(private){{/if}}</small></h3>
+    <input type="text" class="game-name" value="{{ game.name }}" style="display: none;">
+    <h3 class="game-name">{{ game.name }} <small>{{#if game.public }}(public){{else}}(private){{/if}}</small></h3>
   </div>
   {{#each uniquecards}}
   <div class="card-preview card-size-magic" data-card-id="{{id}}">

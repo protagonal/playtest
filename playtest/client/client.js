@@ -126,6 +126,12 @@ Template.preview.game = function () {
   return selectedGame();
 }
 
+function updateName() {
+  Games.update(selectedGame()._id, {name: $('input.game-name').val()});
+  $('h3.game-name').show();
+  $('input.game-name').hide();
+}
+
 Template.preview.events({
   'click .card-preview' : function (evt) {
     editSVG($(evt.target).closest('div').data('card-id'));
@@ -137,7 +143,18 @@ Template.preview.events({
     Games.update(selectedGame()._id, {$set: {deleted: true}});
     var game = Games.findOne({});
     Session.set("selected", game._id); 
-
+  },
+  'click h3.game-name' : function () {
+    $('h3.game-name').hide();
+    $('input.game-name').show().focus();
+  },
+  'focusout input.game-name' : function () {
+    updateName();
+  },
+  'keypress input.game-name': function (evt, template) {
+    if (evt.which === 13) {
+      updateName();
+    }
   }
 });
 

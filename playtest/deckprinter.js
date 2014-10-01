@@ -26,7 +26,7 @@ DeckPrinter = function(options) {
     } else {
       throw 'Card size not supported: ' + cardSize;
     }
-    console.log(cardWidth, cardHeight);
+    //console.log(cardWidth, cardHeight);
 
     // distance between edge of cards and edge of paper
     var marginX = 20;
@@ -107,7 +107,7 @@ DeckPrinter = function(options) {
     // TODO: size based on sleeve size
     // console.log('resizing!');
     var el = jqsvg.find('svg');
-    console.log(el);
+    //console.log(el);
     el.attr('width', '100%');
     el.attr('height', '100%');
     el.attr('viewBox', '0 0 316 441'); 

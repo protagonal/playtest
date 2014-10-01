@@ -127,7 +127,7 @@ Template.preview.game = function () {
 }
 
 function updateName() {
-  Games.update(selectedGame()._id, {name: $('input.game-name').val()});
+  Games.update(selectedGame()._id, {$set: {name: $('input.game-name').val()}});
   $('h3.game-name').show();
   $('input.game-name').hide();
 }

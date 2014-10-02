@@ -58,3 +58,34 @@ The latest version of this project is hosted [here](http://playtest.meteor.com).
 - print diffs, to save time when tweaking game rules
 - automatically show odds of drawing various cards and card combinations
 - google docs API integration
+
+### Admin stuff
+
+Back up production database
+
+```
+$ meteor mongo --url playtest.meteor.com
+$ # within 1 minute, pull username and password from that and put them here:
+$ mongodump -h production-db-b1.meteor.io --port 27017 --username client-5ea1628f --password c72bbef2-b251-758d-7376-cbbd398534c3 -d playtest_meteor_com
+```
+
+Convert BSON to JSON
+
+```
+$ for f in dump/playtest_meteor_com/*.bson; do bsondump "$f" > "$f.json"; done
+```
+
+Restore from production database backup. 
+
+```
+$ meteor mongo --url playtest.meteor.com
+$ # again, 1 minute to construct something like following command:
+$ mongorestore -u client -h production-db-b2.meteor.io:27017 -d myApp_meteor_com dump/2014_10_21_v2/myApp_meteor_com -p [password from meteor mongo --url]
+```
+
+The above mongorestore command doesn't actually work. I get this error. Need to figure out why.
+
+```
+ERROR: trying to write to non-master production-db-b2.meteor.io:27017
+isMaster info: { setName: "production-b", ismaster: false, secondary: true, hosts: [ "production-db-b2.meteor.io:27017", "production-db-b1.meteor.io:27017", "production-db-b3.meteor.io:27017" ], arbiters: [ "production-dbarb-b2.meteor.io:27017", "production-dbarb-b1.meteor.io:27017" ], primary: "production-db-b1.meteor.io:27017", me: "production-db-b2.meteor.io:27017", maxBsonObjectSize: 16777216, maxMessageSizeBytes: 48000000, localTime: new Date(1412194885641), ok: 1.0 }
+```

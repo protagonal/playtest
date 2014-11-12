@@ -76,28 +76,15 @@
 
       clone.insertBefore(styles(clone), clone.firstChild);
 
-      console.log('width', clone.getAttribute('width'), '/', clone.style.width, '/', out$.getComputedStyle(el).getPropertyValue('width'));
-      console.log('height', clone.getAttribute('height'), '/', clone.style.height, '/', out$.getComputedStyle(el).getPropertyValue('height'));
-
-      var width = parseInt(
-        // haaaaack
-        clone.getAttribute('width') === '100%' ? null : clone.getAttribute('width')
-          || clone.style.width
-          || out$.getComputedStyle(el).getPropertyValue('width')
-      );
-      var height = parseInt(
-        // saaaame
-        clone.getAttribute('height') === '100%' ? null : clone.getAttribute('height')
-          || clone.style.height
-          || out$.getComputedStyle(el).getPropertyValue('height')
-      );
       // holy hack batman
-      width = 316;
-      height = 441;
-      console.log('width', width, 'height', height);
+      oldWidth = 316;
+      oldHeight = 441;
+      width = 750;
+      height = 1125;
+      clone.setAttribute("preserveAspectRatio", "none");
       clone.setAttribute("width", width * scaleFactor);
       clone.setAttribute("height", height * scaleFactor);
-      clone.setAttribute("viewBox", "0 0 " + width + " " + height);
+      clone.setAttribute("viewBox", "0 0 " + oldWidth + " " + oldHeight);
 
       var svg = doctype + outer.innerHTML;
       var uri = 'data:image/svg+xml;base64,' + window.btoa(unescape(encodeURIComponent(svg)));

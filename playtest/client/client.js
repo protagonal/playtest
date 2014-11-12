@@ -1,5 +1,7 @@
 Meteor.subscribe('deckspec');
 
+Blaze._allowJavascriptUrls();
+
 // If no party selected, select one.
 Meteor.startup(function () {
   Deps.autorun(function () {
@@ -15,6 +17,13 @@ function selectedGame() {
   return Games.findOne(Session.get("selected"));
 }
 
+/** pad a number `n` with `z` characters up to size `width` */
+function pad(n, width, z) {
+  z = z || '0';
+  n = n + '';
+  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+}
+
 Template.deckspec.deckspec = function () {
   return selectedGame();
 };
@@ -23,7 +32,7 @@ Template.deckspec.events({
   'focusout' : function (evt) {
     var deckspec = Template.deckspec.deckspec();
     var value = String(evt.target.value || "");
-    console.log(value);
+    //console.log(value);
     Games.update(selectedGame()._id, {$set: {spec: value}});
   }
 });
@@ -146,6 +155,12 @@ Template.preview.events({
   },
   'click input.export' : function () {
     var cards = document.getElementsByTagName("svg");
+    // only export visible cards
+    cards = _.filter(cards, function(c) { 
+      var style = window.getComputedStyle(c);
+      return (c.offsetParent !== null && style.display !== 'none')
+    });
+    console.log(cards.length + ' cards to export.');
     async.map(cards, function(card, callback) {
       svgAsDataUri(card, 1, function(uri) {
         var image = new Image();
@@ -166,11 +181,10 @@ Template.preview.events({
       for(var i = 0; i < transformed.length; i++) {
         var image = new Image();
         image.src = transformed[i].toDataURL();
-        console.log('image: '+image.src.substr(0, image.src.indexOf(',')));
         // substr() bit is from this answer:
         // http://stackoverflow.com/a/15287471/81346
         zip.file(
-          "card-" + i + ".png", 
+          "card-" + pad(i, 4) + ".png", 
           image.src.substr(image.src.indexOf(',') + 1), {base64: true});
       }
       var content = zip.generate({type:"blob"});
@@ -224,7 +238,7 @@ function getCardSVG(options) {
   }
   var printer = DeckPrinter({layout: '2x2'});
   var previewcards = printer.preview(cards, svg, options);
-  console.log(previewcards);
+  //console.log(previewcards);
   return previewcards;
 }
 

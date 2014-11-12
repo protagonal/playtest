@@ -106,14 +106,14 @@
     <h3 class="game-name">{{ game.name }} <small>{{#if game.public }}(public){{else}}(private){{/if}}</small></h3>
   </div>
   {{#each uniquecards}}
-  <div class="card-preview card-size-magic" data-card-id="{{id}}">
+    <div class="card-preview card-size-magic" data-card-id="{{id}}">
       {{{ svg }}}
     </div>
   {{/each}}
   <br>
   <input type="button" class="print" value="Print" />
   <input type="button" class="delete" value="Delete" />
-  <input type="button" class="export" value="Export for GameCrafter" />
+  <input type="button" class="export" value="Export as GameCrafter Bridge Deck" />
 </template>
 
 <template name="printable">

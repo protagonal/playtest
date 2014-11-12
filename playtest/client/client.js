@@ -183,9 +183,16 @@ Template.preview.events({
         image.src = transformed[i].toDataURL();
         // substr() bit is from this answer:
         // http://stackoverflow.com/a/15287471/81346
+        var filename = "card-" + pad(i, 4) + ".png";
+        var name = cards[i].getAttribute("cardns:name");
+        if (name) {
+          filename = 
+            name.replace(/[^a-z0-9]/gi, '_').toLowerCase() + ".png";
+        }
         zip.file(
-          "card-" + pad(i, 4) + ".png", 
-          image.src.substr(image.src.indexOf(',') + 1), {base64: true});
+          filename,
+          image.src.substr(image.src.indexOf(',') + 1), 
+          {base64: true});
       }
       var content = zip.generate({type:"blob"});
       saveAs(content, "cards.zip");
@@ -238,7 +245,7 @@ function getCardSVG(options) {
   }
   var printer = DeckPrinter({layout: '2x2'});
   var previewcards = printer.preview(cards, svg, options);
-  //console.log(previewcards);
+  console.log(previewcards);
   return previewcards;
 }
 
@@ -277,5 +284,3 @@ Template.menu.events({
 Template.menu.games = function () {
   return Games.find({}); 
 }
-
-

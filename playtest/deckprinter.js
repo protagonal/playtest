@@ -137,6 +137,12 @@ DeckPrinter = function(options) {
     resize(jqsvg);
     var styles = "";
 
+    // add card name to svg element
+    if (card.hasOwnProperty('name')) {
+      jqsvg.find('svg').attr('xmlns:cardns', 'http://www.mydomain.com/cardns');
+      jqsvg.find('svg').attr('cardns:name', card.name);
+    }
+
     // TODO?: card positioning
     return {svg: xmlToString(jqsvg[0]), id: id, styles: styles};
   }

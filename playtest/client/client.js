@@ -144,6 +144,39 @@ Template.preview.events({
     var game = Games.findOne({});
     Session.set("selected", game._id); 
   },
+  'click input.export' : function () {
+    var cards = document.getElementsByTagName("svg");
+    async.map(cards, function(card, callback) {
+      svgAsDataUri(card, 1, function(uri) {
+        var image = new Image();
+        image.src = uri;
+        image.onload = function() {
+          var canvas = document.createElement('canvas');
+          canvas.width = image.width;
+          canvas.height = image.height;
+          var context = canvas.getContext('2d');
+          context.drawImage(image, 0, 0);
+
+          callback(null, canvas);
+        }
+      });
+    }, function(err, transformed) {
+      // zip up array of image uris
+      var zip = new JSZip();
+      for(var i = 0; i < transformed.length; i++) {
+        var image = new Image();
+        image.src = transformed[i].toDataURL();
+        console.log('image: '+image.src.substr(0, image.src.indexOf(',')));
+        // substr() bit is from this answer:
+        // http://stackoverflow.com/a/15287471/81346
+        zip.file(
+          "card-" + i + ".png", 
+          image.src.substr(image.src.indexOf(',') + 1), {base64: true});
+      }
+      var content = zip.generate({type:"blob"});
+      saveAs(content, "cards.zip");
+    });
+  },
   'click h3.game-name' : function () {
     $('h3.game-name').hide();
     $('input.game-name').show().focus();

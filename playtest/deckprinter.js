@@ -1,13 +1,14 @@
 DeckPrinter = function(options) {
   var cardsizes = {
-    'magic the gathering': {width: 63,   'height': 88},
-    'citadels':            {width: 57,   'height': 89},
-    'bohnanza':            {width: 56,   'height': 87},
-    'dominion':            {width: 59,   'height': 91},
-    'ticket to ride':      {width: 44,   'height': 68},
-    'lost cities':         {width: 79,   'height': 110},
-    'power grid':          {width: 70,   'height': 70},
-    'poker':               {width: 63.5, 'height': 88.9},
+    'magic the gathering':  {width: 63,   height: 88},
+    'citadels':             {width: 57,   height: 89},
+    'bohnanza':             {width: 56,   height: 87},
+    'dominion':             {width: 59,   height: 91},
+    'ticket to ride':       {width: 44,   height: 68},
+    'lost cities':          {width: 79,   height: 110},
+    'power grid':           {width: 70,   height: 70},
+    'poker':                {width: 63.5, height: 88.9},
+    'bridge':               {width: 56,   height: 87}
   };
 
   // returns the rectangular coordinates for a card 
@@ -205,7 +206,7 @@ DeckPrinter = function(options) {
           }
           var qty = card.quantity || 1;
           for (var i = 0; i < qty; i++) {
-            drawCard(doc, 'magic the gathering', options.layout, cardIndex % 4, card);
+            drawCard(doc, 'bridge', options.layout, cardIndex % 4, card);
             cardIndex += 1;
           }
       });

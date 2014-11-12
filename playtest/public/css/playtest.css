@@ -30,6 +30,16 @@ textarea {
     height: 176px;
 }
 
+.svgeditor-close {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: none;
+}
+
+.svgeditor-close.active {
+  display: inline;
+}
+
 @media print {
   body {
     background: #fff;

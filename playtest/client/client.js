@@ -50,14 +50,17 @@ function editSVG(cardid) {
   var multiplier = 5;
   var width = 63 * multiplier;
   var height = 88 * multiplier;
-  $("#csveditor").html('<iframe id="svg_frame" src="svg-edit/svg-editor.html?showlayers=true&dimensions=' + width + ',' + height + '" width="730" height="880"/>');
+  $("#svgeditor").html('<iframe id="svg_frame" src="svg-edit/svg-editor.html?showlayers=true&dimensions=' + width + ',' + height + '" width="730" height="880"/>');
   
   var card = getdeckcard(cardid);
   var svg = Template.deckspec.deckspec().cardtemplate;      
   $('#svg_frame').ready(function() {
     var ifrm = $('#svg_frame')[0];
+    // show close button
+    $('.svgeditor-close').addClass('active');
 
     function editor_ready() {
+
       var svgEditor = ifrm.contentWindow.svgEditor;
       
       // make card-selected layers visible, hide the rest
@@ -215,6 +218,11 @@ Template.preview.events({
     if (evt.which === 13) {
       updateName();
     }
+  },
+  'click .svgeditor-close': function (evt, template) {
+    // hide close button
+    $('.svgeditor-close').removeClass('active');
+    $('#svgeditor').html('');
   }
 });
 

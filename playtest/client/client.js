@@ -154,49 +154,55 @@ Template.preview.events({
     Session.set("selected", game._id); 
   },
   'click input.export' : function () {
-    var cards = document.getElementsByTagName("svg");
-    // only export visible cards
-    cards = _.filter(cards, function(c) { 
-      var style = window.getComputedStyle(c);
-      return (c.offsetParent !== null && style.display !== 'none')
-    });
-    console.log(cards.length + ' cards to export.');
-    async.map(cards, function(card, callback) {
-      svgAsDataUri(card, 1, function(uri) {
-        var image = new Image();
-        image.src = uri;
-        image.onload = function() {
-          var canvas = document.createElement('canvas');
-          canvas.width = image.width;
-          canvas.height = image.height;
-          var context = canvas.getContext('2d');
-          context.drawImage(image, 0, 0);
+    $('body,input,button').css({'cursor':'wait'});
 
-          callback(null, canvas);
-        }
+    setTimeout(function() {
+      var cards = document.getElementsByTagName("svg");
+      // only export visible cards
+      cards = _.filter(cards, function(c) { 
+        var style = window.getComputedStyle(c);
+        return (c.offsetParent !== null && style.display !== 'none')
       });
-    }, function(err, transformed) {
-      // zip up array of image uris
-      var zip = new JSZip();
-      for(var i = 0; i < transformed.length; i++) {
-        var image = new Image();
-        image.src = transformed[i].toDataURL();
-        // substr() bit is from this answer:
-        // http://stackoverflow.com/a/15287471/81346
-        var filename = "card-" + pad(i, 4) + ".png";
-        var name = cards[i].getAttribute("cardns:name");
-        if (name) {
-          filename = 
-            name.replace(/[^a-z0-9]/gi, '_').toLowerCase() + ".png";
+      console.log(cards.length + ' cards to export.');
+      async.map(cards, function(card, callback) {
+        svgAsDataUri(card, 1, function(uri) {
+          var image = new Image();
+          image.src = uri;
+          image.onload = function() {
+            var canvas = document.createElement('canvas');
+            canvas.width = image.width;
+            canvas.height = image.height;
+            var context = canvas.getContext('2d');
+            context.drawImage(image, 0, 0);
+
+            callback(null, canvas);
+          }
+        });
+      }, function(err, transformed) {
+        // zip up array of image uris
+        var zip = new JSZip();
+        for(var i = 0; i < transformed.length; i++) {
+          var image = new Image();
+          image.src = transformed[i].toDataURL();
+          // substr() bit is from this answer:
+          // http://stackoverflow.com/a/15287471/81346
+          var filename = "card-" + pad(i, 4) + ".png";
+          var name = cards[i].getAttribute("cardns:name");
+          if (name) {
+            filename = 
+              name.replace(/[^a-z0-9]/gi, '_').toLowerCase() + ".png";
+          }
+          zip.file(
+            filename,
+            image.src.substr(image.src.indexOf(',') + 1), 
+            {base64: true});
         }
-        zip.file(
-          filename,
-          image.src.substr(image.src.indexOf(',') + 1), 
-          {base64: true});
-      }
-      var content = zip.generate({type:"blob"});
-      saveAs(content, "cards.zip");
-    });
+        var content = zip.generate({type:"blob"});
+        saveAs(content, "cards.zip");
+        $('body,input,button').css({'cursor':'default'})
+      });
+    }, 50); // start export after 50 ms
+
   },
   'click h3.game-name' : function () {
     $('h3.game-name').hide();

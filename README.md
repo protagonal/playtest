@@ -1,6 +1,6 @@
 ## Playtest
 
-Playtest is a card game printer. It takes tabular card specification format as input and prints pages of numbered and versioned cards in the correct quantities so they can be play tested.
+Playtest is a card game printer. It takes card specification as input and prints pages of numbered and versioned cards in the correct quantities so they can be play tested. It can also export a zip file of PNGs that can be added as a deck in [GameCrafter](https://www.thegamecrafter.com/).
 
 
 ### Deck Spec
@@ -53,8 +53,30 @@ The latest version of this project is hosted [here](http://playtest.meteor.com).
 * The text box on the bottom on the right labeled "Design" is the SVG card design. It's for debugging. As with the deck specification, click outside after making changes to save them.
 * If you are not logged in, any new games are public and show up in everyone's list. If you're logged in, any new games you create are private and only accessible to you.
 
+### Export to GameCrafter
+
+An especially alpha feature is GameCrafter export. This should, in theory, let you print a physical copy of your game for about $10. I haven't yet printed a game this way but will update this when I do.
+
+- press the "Export as GameCrafter Bridge Deck" button. This will save a zip file containing PNGs of each card. (A couple of alpha pitfalls: 1. card PNGs are named based on the "name" field, or get a number if there's no such field. The name should be filename safe or you might get some odd results. 2. content for cards can't run all the way to the edge of the card area.)
+- go to http://thegamecrafter.com
+- log in
+- click on Make Games -> My Games 
+- click Create a Custom Game
+- click Create Custom Game Cards
+- click Bridge Deck
+- click Add
+- click Edit Cards
+- click the folder icon
+- under Create a Sub-Folder, enter "My Cards" (or something like that) and press Create
+- unzip the file from Play Test
+- drag and drop the PNGs into the Drop files 
+- click Choose This Folder 
+- click Import "My Cards"
+- finish ordering the game in GameCrafter
+
 ### TODO
 
+- finish documenting GameCrafter game printing stuff
 - print diffs, to save time when tweaking game rules
 - automatically show odds of drawing various cards and card combinations
 - google docs API integration
